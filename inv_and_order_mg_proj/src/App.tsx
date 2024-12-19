@@ -1,22 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import './App.css';
+import InvNavbar from "./components/navbar/InvNavbar";
+import InvRoutes from "./InvRoutes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-    <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to ="/">Home</Link>
-          </li>
-        </ul>
-      </nav>
-    </Router>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div>
+        <InvNavbar />
+        <InvRoutes />
+      </div>
+    </QueryClientProvider>
   );
 }
 
