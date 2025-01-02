@@ -9,8 +9,13 @@ export const columns: ColumnDef<Product>[] = [
     enableColumnFilter: true,
   },
   {
+    accessorKey: "prodItemNum",
+    header: "Material Number",
+    enableColumnFilter: true,
+  },
+  {
     accessorKey: "prodItemLotNum",
-    header: "Lot Num",
+    header: "Product Lot Num",
     enableColumnFilter: true,
   },
   {
@@ -21,7 +26,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "prodExpDate",
     header: "ExpDate",
-    enableColumnFilter: false,
+    enableColumnFilter: true,
   },
   {
     accessorKey: "prodItemLoc",
@@ -32,11 +37,11 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "prodQuantity",
     header: "QTY",
-    enableColumnFilter: false,
+    enableColumnFilter: true,
   },
   {
     accessorKey: "prodWeight",
     header: "Weight",
-    enableColumnFilter: false,
+    enableColumnFilter: true,
   },
 ];

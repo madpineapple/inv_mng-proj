@@ -17,7 +17,6 @@ const OrderTable = () => {
     if (data) {
       console.log(data);
       setOrderData(data);
-      console.log("orderData: ", orderData);
     }
   }, [data]);
 
@@ -59,7 +58,7 @@ const OrderTable = () => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => {
-                console.log("Rendering cell:", cell);
+                console.log("Rendering cell:", cell.renderValue);
                 return (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

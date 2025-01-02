@@ -7,6 +7,12 @@ td {
   /* //border: 1px solid; */
   text-align: left;
   padding: 8px 10px;
+  max-width: 10px;
+}
+
+.inventory {
+  align-items: center;
+  justify-content: center;
 }
 
 table {
@@ -15,7 +21,8 @@ table {
   border: 1px solid #ccc;
   margin-left: 25px;
   margin-top: 5px;
-
+  max-width: 90%; /* Set a minimum width to trigger scrolling */
+  table-layout: auto; /* Let the table resize its columns based on content */
   background-color: #fff;
 }
 

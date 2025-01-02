@@ -10,6 +10,7 @@ const AddNewModal: React.FC<ModalProps> = ({ isOpen, toggle }) => {
       prodItemID: 0,
       prodItemName: "",
       prodItemLoc: "",
+      prodItemNum: "",
       prodItemLotNum: "",
       prodVendorLotNum: "",
       prodExpDate: new Date(),

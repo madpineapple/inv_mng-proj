@@ -70,8 +70,12 @@ const EditableRow: React.FC<EditableRowProps> = ({ row }) => {
       <td>
         {isEditing ? (
           <div>
-            <Button onClick={handleSaveClick}>Save</Button>
-            <Button onClick={handleDeleteClick}>Delete</Button>
+            <Button onClick={handleSaveClick} variant="success">
+              Save
+            </Button>
+            <Button onClick={handleDeleteClick} variant="danger">
+              Delete
+            </Button>
           </div>
         ) : (
           <Button onClick={handleEditClick}>Edit</Button>
