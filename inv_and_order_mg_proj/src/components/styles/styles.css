@@ -25,7 +25,14 @@ table {
   table-layout: auto; /* Let the table resize its columns based on content */
   background-color: #fff;
 }
-
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  max-width: 50%;
+  /* align-items: center; */
+}
 .editButton {
   background-color: green;
   margin: 5px;

@@ -3,28 +3,21 @@ import { Order } from "../types";
 
 export const columns: ColumnDef<Order>[] = [
   {
-    accessorKey: "p_OrderID",
-    header: "OrderId",
+    accessorKey: "p_customerName",
+    header: "Customer",
     cell: ({ getValue }) => getValue(),
+    enableColumnFilter: true,
   },
   {
-    accessorKey: "p_CustomerId",
-    header: "CustomerId",
-    cell: ({ getValue }) => getValue(),
-  },
-  {
-    accessorKey: "p_OrderDate",
+    accessorKey: "p_orderDate",
     header: " OrderDate",
     cell: ({ getValue }) => getValue(),
+    enableColumnFilter: true,
   },
   {
-    accessorKey: "p_OrderStatus",
+    accessorKey: "p_orderStatus",
     header: "OrderStatus",
     cell: ({ getValue }) => getValue(),
-  },
-  {
-    accessorKey: "p_Price",
-    header: "Total Price",
-    cell: ({ getValue }) => getValue(),
+    enableColumnFilter: true,
   },
 ];

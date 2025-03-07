@@ -34,7 +34,6 @@ export const InventoryTable = () => {
     state: {
       columnFilters,
     },
-
     onColumnFiltersChange: setColumnFilters,
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {

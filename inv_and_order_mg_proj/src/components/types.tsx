@@ -17,3 +17,12 @@ export interface Order {
   p_Price: number;
   products: Product[];
 }
+
+export interface Customer {
+  p_CustomerID: number;
+  p_CustomerName: string;
+}
+
+export interface CustomerDropdownProps {
+  onSelect: (p_CustomerId: number) => void;
+}
