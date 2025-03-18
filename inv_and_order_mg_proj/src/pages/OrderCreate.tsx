@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomerDropdown from "../components/customers/CustomerDropDown";
@@ -43,6 +43,7 @@ const OrderCreate = () => {
       p_m_productId: selectedProduct!,
       p_quantity: quantity!,
     };
+
     createOrder(orderData, {
       onSuccess: () => {
         console.log("Order added successfully!");

@@ -13,8 +13,7 @@ function InvNavbar() {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/inventory">Inv</Nav.Link>
             <Nav.Link href="/order">Order</Nav.Link>
-            {/* <Nav.Link href="/BA">Inv</Nav.Link>
-            <Nav.Link href="/cycle_count">Inv</Nav.Link> */}
+            <Nav.Link href="/customer">Customer</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
