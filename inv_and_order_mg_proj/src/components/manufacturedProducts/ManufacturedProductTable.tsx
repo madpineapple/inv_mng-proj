@@ -1,0 +1,250 @@
+import { useEffect, useState } from "react";
+import { Customer, Recipe } from "../types";
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { columns } from "./Columns";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useGetRecipeByCustomerID } from "../../hooks/recipeHooks/useGetRecipeByCustomerID";
+import React from "react";
+
+const ManufacturedProductTable = () => {
+  const location = useLocation();
+  const state = location.state as { customer?: Customer } | undefined;
+  const customerID = state?.customer?.p_CustomerId;
+  const [productData, setProductData] = useState<Recipe[]>([]);
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
+  const [editedItem, setEditedItem] = useState<Recipe>();
+
+  const toggleRow = (id: number) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
+    );
+  };
+  const { data, isLoading, error } = useGetRecipeByCustomerID(customerID || 0);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data) {
+      setProductData(data);
+    }
+  }, [data]);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const table = useReactTable({
+    data: productData,
+    columns: columns,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    enableRowSelection: true,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageIndex: 0, //custom initial page index
+        pageSize: 10, //custom default page size
+      },
+    },
+  });
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <p>Error loading inventory!</p>;
+
+  return (
+    <div>
+      <table className="table">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => {
+            const rowId = Number(row.original.m_productID);
+            return (
+              <React.Fragment key={row.id}>
+                <tr>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      onClick={() => toggleRow(rowId)}
+                      className="text-blue-500"
+                    >
+                      {expandedRows.includes(rowId) ? "▲" : "▼"}
+                    </button>
+                  </td>
+                </tr>
+
+                {/* Expanded Row  with Table*/}
+                {expandedRows.includes(rowId) && (
+                  <table
+                    style={{
+                      tableLayout: "fixed",
+                      width: "100%",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th style={{ width: "60%" }}>Product</th>
+                        <th style={{ width: "40%" }}>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {row.original.p_productName ? (
+                        (() => {
+                          try {
+                            // Parse the string
+                            const parsed = JSON.parse(
+                              row.original.p_productName
+                            );
+
+                            // Handle case where the parsed data is an array
+                            if (Array.isArray(parsed)) {
+                              return parsed.map((item: any, index: number) => (
+                                <tr key={index}>
+                                  <td
+                                    style={{
+                                      backgroundColor: "lightgreen",
+                                      maxWidth: "50%",
+                                      wordBreak: "break-word", // Ensure content stays within bounds
+                                    }}
+                                  >
+                                    {item.productName}
+                                  </td>
+                                  <td
+                                    style={{
+                                      backgroundColor: "lightyellow",
+                                      maxWidth: "50%",
+                                      wordBreak: "break-word", // Ensure content stays within bounds
+                                    }}
+                                  >
+                                    {item.quantity}
+                                  </td>
+                                </tr>
+                              ));
+                            }
+
+                            // Handle case where the parsed data is an object
+                            else if (parsed && typeof parsed === "object") {
+                              return (
+                                <div>
+                                  {parsed.productName} (Quantity:{" "}
+                                  {parsed.quantity})
+                                </div>
+                              );
+                            }
+
+                            // If it's neither an array nor an object, handle invalid data
+                            else {
+                              return <span>Invalid data format</span>;
+                            }
+                          } catch (error) {
+                            return <span>Error parsing data</span>;
+                          }
+                        })()
+                      ) : (
+                        <span>No ingredients available</span>
+                      )}
+                    </tbody>
+                  </table>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="h-2" />
+      <div className="flex items-center gap-2">
+        <button
+          className="border rounded p-1"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<<"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {"<"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {">"}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {">>"}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="border p-1 rounded w-16"
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+};
+export default ManufacturedProductTable;

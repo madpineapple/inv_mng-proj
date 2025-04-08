@@ -32,6 +32,15 @@ export interface ManufacturedProduct {
   sku: string;
   created_at: Date;
 }
+export interface Recipe {
+  p_m_productName: string;
+  m_productID: number;
+  p_customerID: number;
+  p_quantity: number;
+  p_unit: string;
+  //need to rename this to make it more intuitive
+  p_productName: string;
+}
 export interface CustomerDropdownProps {
   onSelect: (p_CustomerId: number) => void;
 }

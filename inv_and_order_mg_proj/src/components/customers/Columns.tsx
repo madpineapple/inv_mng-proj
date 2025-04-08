@@ -1,6 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Customer } from "../types";
-import { Button } from "react-bootstrap";
 
 export const columns: ColumnDef<Customer>[] = [
   {

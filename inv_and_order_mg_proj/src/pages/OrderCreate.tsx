@@ -33,7 +33,7 @@ const OrderCreate = () => {
     setSelectedCustomer(customerId);
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     const orderData: Order = {
       p_OrderID: 0,
       p_CustomerId: selectedCustomer!,

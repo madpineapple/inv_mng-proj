@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Customer, ManufacturedProduct } from "../../components/types";
+import { ManufacturedProduct } from "../../components/types";
 
 const fetchManufacturedProductByCustomerID = async (
   customerID: number

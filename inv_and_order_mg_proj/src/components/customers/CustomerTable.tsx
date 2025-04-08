@@ -20,7 +20,6 @@ const CustomerTable = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setCustomerData(data);
     }
   }, [data]);

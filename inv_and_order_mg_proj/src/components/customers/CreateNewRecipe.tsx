@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Product } from "../types";
 import { useInventory } from "../../hooks/inventoryHooks/useInventory";
 import Select from "react-select";
+import { useCreateNewRecipeHooks } from "../../hooks/manufacturedProductsHooks/useCreateNewRecipeHooks";
+import { useLocation } from "react-router-dom";
 
 const CreateNewRecipe = () => {
   const { register, handleSubmit, reset } = useForm();
+  const [customer, setCustomer] = useState<number | 0>(0);
+  const [quantity, setQuantity] = useState<number | 0>(0);
+  const [unit, sertUnit] = useState("");
   const [recipeName, setRecipeName] = useState("");
-
   const [selectedIngredients, setSelectedIngredients] = useState<
     { product: Product; quantity: number }[]
   >([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setCustomer(location.state?.customer.p_CustomerId);
+  });
+
   const { data, isLoading, error } = useInventory();
+
+  const {
+    mutate: createRecipe,
+    isPending,
+    isError,
+    isSuccess,
+  } = useCreateNewRecipeHooks();
 
   const ingredientOptions = data
     ? data.map((product: Product) => ({
@@ -37,13 +55,19 @@ const CreateNewRecipe = () => {
 
   const onSubmit = async () => {
     const recipeData = {
-      name: recipeName,
-      ingredients: selectedIngredients.map((ingredient) => ({
-        productId: ingredient.product.prodItemID,
-        quantity: ingredient.quantity,
-      })),
+      p_m_productName: recipeName,
+      m_productID: 0,
+      p_customerID: customer,
+      p_quantity: quantity,
+      p_unit: "kg",
+      p_productName: JSON.stringify(
+        selectedIngredients.map((ingredient) => ({
+          productName: ingredient.product.prodItemName,
+          quantity: ingredient.quantity,
+        }))
+      ),
     };
-    console.log(recipeData);
+    createRecipe(recipeData);
   };
   return (
     <div>
@@ -53,6 +77,12 @@ const CreateNewRecipe = () => {
         <input
           {...register("recipeName", { required: "Recipe is required" })}
           onChange={(e) => setRecipeName(e.target.value)}
+        />
+
+        <label>Enter minimum order quantity</label>
+        <input
+          {...register("quantity", { required: "Quantity is required" })}
+          onChange={(e) => setQuantity(Number(e.target.value))}
         />
 
         <label>Ingredients:</label>

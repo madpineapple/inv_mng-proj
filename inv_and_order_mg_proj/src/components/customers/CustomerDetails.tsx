@@ -1,9 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Customer } from "../types";
+import { Customer, ManufacturedProduct } from "../types";
+import { useState } from "react";
+import { useManufacturedProductbyCustomerID } from "../../hooks/manufacturedProductsHooks/useManufacturedProductsHooks";
+import ManufacturedProductTable from "../manufacturedProducts/ManufacturedProductTable";
 
 const CustomerDetails: React.FC = () => {
   const location = useLocation();
   const state = location.state as { customer?: Customer } | undefined;
+  const customerID = state?.customer?.p_CustomerId;
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useManufacturedProductbyCustomerID(customerID || 0);
+
   const navigate = useNavigate();
 
   return (
@@ -16,8 +26,9 @@ const CustomerDetails: React.FC = () => {
           })
         }
       >
-        + Add new recipe
+        + Add new customer product
       </button>
+      <ManufacturedProductTable />
     </div>
   );
 };
