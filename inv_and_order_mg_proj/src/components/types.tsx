@@ -34,7 +34,7 @@ export interface ManufacturedProduct {
 }
 export interface Recipe {
   p_m_productName: string;
-  m_productID: number;
+  p_m_productID: number;
   p_customerID: number;
   p_quantity: number;
   p_unit: string;

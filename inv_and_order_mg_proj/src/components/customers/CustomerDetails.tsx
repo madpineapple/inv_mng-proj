@@ -14,6 +14,7 @@ const CustomerDetails: React.FC = () => {
     error,
   } = useManufacturedProductbyCustomerID(customerID || 0);
 
+  console.log(customerID);
   const navigate = useNavigate();
 
   return (

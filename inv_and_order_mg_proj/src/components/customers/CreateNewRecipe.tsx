@@ -56,7 +56,7 @@ const CreateNewRecipe = () => {
   const onSubmit = async () => {
     const recipeData = {
       p_m_productName: recipeName,
-      m_productID: 0,
+      p_m_productID: 0,
       p_customerID: customer,
       p_quantity: quantity,
       p_unit: "kg",

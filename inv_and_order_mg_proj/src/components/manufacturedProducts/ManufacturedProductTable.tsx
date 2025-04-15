@@ -19,7 +19,6 @@ const ManufacturedProductTable = () => {
   const customerID = state?.customer?.p_CustomerId;
   const [productData, setProductData] = useState<Recipe[]>([]);
   const [expandedRows, setExpandedRows] = useState<number[]>([]);
-  const [editedItem, setEditedItem] = useState<Recipe>();
 
   const toggleRow = (id: number) => {
     setExpandedRows((prev) =>
@@ -36,6 +35,8 @@ const ManufacturedProductTable = () => {
     }
   }, [data]);
 
+  console.log("data: ", data);
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -51,8 +52,8 @@ const ManufacturedProductTable = () => {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageIndex: 0, //custom initial page index
-        pageSize: 10, //custom default page size
+        pageIndex: 0,
+        pageSize: 10,
       },
     },
   });
@@ -80,7 +81,7 @@ const ManufacturedProductTable = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => {
-            const rowId = Number(row.original.m_productID);
+            const rowId = Number(row.original.p_m_productID);
             return (
               <React.Fragment key={row.id}>
                 <tr>
@@ -99,6 +100,16 @@ const ManufacturedProductTable = () => {
                     >
                       {expandedRows.includes(rowId) ? "▲" : "▼"}
                     </button>
+                    <button
+                      onClick={() =>
+                        navigate(`/EditProduct`, {
+                          state: { product: row.original },
+                        })
+                      }
+                    >
+                      {" "}
+                      Edit
+                    </button>
                   </td>
                 </tr>
 
@@ -116,16 +127,14 @@ const ManufacturedProductTable = () => {
                         <th style={{ width: "40%" }}>Quantity</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {row.original.p_productName ? (
                         (() => {
                           try {
-                            // Parse the string
                             const parsed = JSON.parse(
                               row.original.p_productName
                             );
-
-                            // Handle case where the parsed data is an array
                             if (Array.isArray(parsed)) {
                               return parsed.map((item: any, index: number) => (
                                 <tr key={index}>
@@ -149,20 +158,14 @@ const ManufacturedProductTable = () => {
                                   </td>
                                 </tr>
                               ));
-                            }
-
-                            // Handle case where the parsed data is an object
-                            else if (parsed && typeof parsed === "object") {
+                            } else if (parsed && typeof parsed === "object") {
                               return (
                                 <div>
                                   {parsed.productName} (Quantity:{" "}
                                   {parsed.quantity})
                                 </div>
                               );
-                            }
-
-                            // If it's neither an array nor an object, handle invalid data
-                            else {
+                            } else {
                               return <span>Invalid data format</span>;
                             }
                           } catch (error) {
