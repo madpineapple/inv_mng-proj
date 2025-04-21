@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  BrowserRouter,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
 import Order from "./pages/Order";
@@ -9,17 +14,15 @@ import CreateNewRecipe from "./components/customers/CreateNewRecipe";
 import EditProduct from "./components/manufacturedProducts/EditProduct";
 
 const InvRoutes = () => (
-  <Router>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/Inventory" element={<Inventory />} />
-      <Route path="/Order" element={<Order />} />
-      <Route path="/OrderCreate" element={<OrderCreate />} />
-      <Route path="/Customer" element={<Customer />} />
-      <Route path="/customer/:id" element={<CustomerDetails />} />
-      <Route path="/recipe/:id" element={<CreateNewRecipe />} />
-      <Route path="/EditProduct" element={<EditProduct />} />
-    </Routes>
-  </Router>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/inventory" element={<Inventory />} />
+    <Route path="/order" element={<Order />} />
+    <Route path="/orderCreate" element={<OrderCreate />} />
+    <Route path="/customer" element={<Customer />} />
+    <Route path="/customer/:id" element={<CustomerDetails />} />
+    <Route path="/recipe/:id" element={<CreateNewRecipe />} />
+    <Route path="/editProduct" element={<EditProduct />} />
+  </Routes>
 );
 export default InvRoutes;

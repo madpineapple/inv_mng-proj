@@ -83,7 +83,7 @@ const EditProduct = () => {
           value={recipeName}
           onChange={(e) => setRecipeName(e.target.value)}
         />
-        <label>Minimum order quantity</label>
+        <label>Minimum order quantity (in units)</label>
         <input
           type="number"
           value={quantity}
@@ -103,14 +103,16 @@ const EditProduct = () => {
               }
               placeholder="Product ID"
             />
+
             <input
               type="number"
               value={ingredient.quantity}
               onChange={(e) =>
                 handleIngredientChange(index, "quantity", e.target.value)
               }
-              placeholder="Quantity"
             />
+            <label>qty in kilos</label>
+
             <button type="button" onClick={() => removeIngredient(index)}>
               Remove
             </button>

@@ -1,23 +1,26 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-
+import logo from "../../images/AMLogo.png";
+import { Link } from "react-router-dom";
 function InvNavbar() {
   return (
-    <Navbar bg="dark" data-bs-theme="dark">
-      <Container>
-        <Navbar.Brand href="#home">GMA Managment Software</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/inventory">Inv</Nav.Link>
-            <Nav.Link href="/order">Order</Nav.Link>
-            <Nav.Link href="/customer">Customer</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <nav className="nav">
+      <Link className="nav-brand" to="/">
+        <img src={logo} />
+      </Link>
+      <div className="nav-links">
+        <Link className="custom-nav-link" to="/">
+          Home
+        </Link>
+        <Link className="custom-nav-link " to="/inventory">
+          Inventory
+        </Link>
+        <Link className="custom-nav-link " to="/order">
+          Order
+        </Link>
+        <Link className="custom-nav-link " to="/customer">
+          Customer
+        </Link>
+      </div>
+    </nav>
   );
 }
 

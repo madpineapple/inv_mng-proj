@@ -1,3 +1,7 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
 tr {
   border-bottom: 1px solid #ccc;
 }
@@ -25,13 +29,12 @@ table {
   table-layout: auto; /* Let the table resize its columns based on content */
   background-color: #fff;
 }
-form {
+.order-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 16px;
   max-width: 50%;
-  /* align-items: center; */
 }
 .editButton {
   background-color: green;
@@ -59,3 +62,188 @@ form {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow around the form */
   max-width: 50%;
 }
+
+.hero {
+  position: relative;
+  height: 85.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  overflow: hidden;
+}
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+.hero-title {
+  font-size: 10rem;
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+  margin-bottom: 1rem;
+  font-family: "Orbitron", sans-serif; /* or another futuristic font */
+  z-index: 2;
+}
+.hero-text {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+.query-form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.query-form input {
+  padding: 1rem;
+  font-size: 1.2rem;
+  border: 2px solid;
+  border-radius: 8px;
+  width: 60%;
+  max-width: 400px;
+  outline: none;
+  z-index: 1;
+}
+
+.query-form button {
+  padding: 1.2rem 2rem;
+  font-size: 1.2rem;
+  background-color: #111;
+  color: #fff;
+  border: 2px solid red;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.query-form button:hover {
+  background-color: #300;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+}
+.triangle-wrapper {
+  position: absolute;
+  width: 70vh;
+  height: 70vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background-color: #df0707;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(10px 10px 200px #df0707)
+    drop-shadow(-10px -10px 50px #df0707);
+  z-index: 0;
+  overflow: hidden; /* Add this */
+  contain: paint;
+}
+.triangle-bg {
+  width: calc(70vh - 70px);
+  height: calc(70vh - 70px);
+  background-color: hsl(210, 50%, 14%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  filter: blur(80px) drop-shadow(-10px -10px 75px #ff1a1a);
+  backdrop-filter: blur(10px);
+  z-index: 0;
+  overflow: hidden; /* Add this */
+  contain: paint;
+}
+.ai-eye {
+  width: 60px;
+  height: 60px;
+  border: 4px solid red;
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.5);
+  background-color: rgba(240, 6, 6, 0.4);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, #0a0a0a, #1a1a1a);
+  /* border-bottom: 2px solid #ff0040; */
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+.nav-brand {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.6); /* Glowing text effect */
+  font-family: "Orbitron", sans-serif;
+  padding-right: 2rem;
+}
+
+.nav-brand img {
+  width: 100px;
+  height: auto;
+}
+.nav-links {
+  display: flex;
+  color: #f5f5f5;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.custom-nav-link {
+  color: #f5f5f5;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 1px;
+  position: relative;
+  transition: color 0.3s, text-shadow 0.3s;
+  padding: 2rem 2rem;
+  border-radius: 6px;
+}
+
+.custom-nav-link:hover {
+  background-color: rgba(255, 0, 64, 0.1);
+  color: #ff0040;
+  text-shadow: 0 0 5px #ff0040;
+}
+.custom-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #ff0040;
+  transition: width 0.3s ease;
+}
+
+.custom-nav-link:hover::after {
+  width: 100%;
+}
+
+/* Mobile view adjustments
+@media (max-width: 768px) {
+  .navbar .navbar-brand {
+    font-size: 1.5rem;
+  }
+
+  .navbar .nav-link {
+    font-size: 1rem;
+  }
+} */

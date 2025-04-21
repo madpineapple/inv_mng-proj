@@ -1,11 +1,14 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomerDropdown from "../components/customers/CustomerDropDown";
 import { useManufacturedProductbyCustomerID } from "../hooks/manufacturedProductsHooks/useManufacturedProductsHooks";
-import { Order } from "../components/types";
+import { Order, RecipeIngredients } from "../components/types";
 import useCreateNewOrder from "../hooks/orderHooks/useCreateNewOrder";
+import IngredientTable from "../components/ingredients/IngredientTable";
+import { useGetIngredients } from "../hooks/ingredientHooks/useGetIngredients";
+import { useCheckInventory } from "../hooks/ingredientHooks/useCheckInventory";
 
 const OrderCreate = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -15,6 +18,7 @@ const OrderCreate = () => {
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<number | null>(null);
+  const [ingredientData, setIngredientData] = useState<RecipeIngredients[]>([]);
 
   const {
     data: products,
@@ -32,7 +36,15 @@ const OrderCreate = () => {
   const handleCustomerSelect = (customerId: number) => {
     setSelectedCustomer(customerId);
   };
+  const { data: ingredients } = useGetIngredients(selectedProduct);
 
+  useEffect(() => {
+    if (ingredients) {
+      setIngredientData(ingredients);
+    }
+  }, [ingredients]);
+
+  const { data: inventory } = useCheckInventory(ingredientData);
   const onSubmit = () => {
     const orderData: Order = {
       p_OrderID: 0,
@@ -58,7 +70,7 @@ const OrderCreate = () => {
   return (
     <div>
       <h1>Create new order</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={"order-form"} onSubmit={handleSubmit(onSubmit)}>
         <CustomerDropdown onSelect={handleCustomerSelect} />
         <label>Pick new order date</label>
         <DatePicker
@@ -76,14 +88,16 @@ const OrderCreate = () => {
           ) : error ? (
             <option>Error fetching products</option>
           ) : (
-            products?.map((product) => (
+            //probably shouldn't have an any type. Review later
+            products?.map((product: any) => (
               <option key={product.m_productID} value={product.m_productID}>
                 {product.m_productName}
               </option>
             ))
           )}
         </select>
-        <label>Enter order quantity</label>
+        {inventory && <IngredientTable inventory={inventory} />}
+        <label>Enter number of 1000-unit batches</label>
         <input
           {...register("quantity", { required: "Quantity is required" })}
           type="number"

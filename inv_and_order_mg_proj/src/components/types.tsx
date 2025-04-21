@@ -32,6 +32,7 @@ export interface ManufacturedProduct {
   sku: string;
   created_at: Date;
 }
+
 export interface Recipe {
   p_m_productName: string;
   p_m_productID: number;
@@ -41,9 +42,28 @@ export interface Recipe {
   //need to rename this to make it more intuitive
   p_productName: string;
 }
+
+export interface RecipeIngredients {
+  id: number;
+  p_m_productID: number;
+  quantity: number;
+  unit: string;
+  productName: string;
+}
+
+export interface IngredientCheck {
+  pmProductName: string;
+  qtyRequired: number;
+  qtyAvailable: number;
+  isEnough: boolean;
+}
+
 export interface CustomerDropdownProps {
   onSelect: (p_CustomerId: number) => void;
 }
 export interface ManufacturedProductDropdownProps {
   onSelect: (p_CustomerId: number) => void;
+}
+export interface IngredientTableProps {
+  inventory: IngredientCheck[] | null;
 }

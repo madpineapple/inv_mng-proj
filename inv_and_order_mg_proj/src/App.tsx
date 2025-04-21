@@ -1,3 +1,4 @@
+import { BrowserRouter } from "react-router-dom";
 import InvNavbar from "./components/navbar/InvNavbar";
 import InvRoutes from "./InvRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,8 +8,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div style={{ padding: 20 }}>
-        <InvNavbar />
-        <InvRoutes />
+        <BrowserRouter>
+          <InvNavbar />
+          <InvRoutes />
+        </BrowserRouter>
       </div>
     </QueryClientProvider>
   );

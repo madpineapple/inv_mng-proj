@@ -35,8 +35,6 @@ const ManufacturedProductTable = () => {
     }
   }, [data]);
 
-  console.log("data: ", data);
-
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
