@@ -60,7 +60,7 @@ const ManufacturedProductTable = () => {
 
   return (
     <div>
-      <table className="table">
+      <table className="custom-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -93,12 +93,7 @@ const ManufacturedProductTable = () => {
                   ))}
                   <td>
                     <button
-                      onClick={() => toggleRow(rowId)}
-                      className="text-blue-500"
-                    >
-                      {expandedRows.includes(rowId) ? "▲" : "▼"}
-                    </button>
-                    <button
+                      className="editButton"
                       onClick={() =>
                         navigate(`/EditProduct`, {
                           state: { product: row.original },
@@ -108,20 +103,27 @@ const ManufacturedProductTable = () => {
                       {" "}
                       Edit
                     </button>
+                    <button
+                      className="dropButton"
+                      onClick={() => toggleRow(rowId)}
+                    >
+                      {expandedRows.includes(rowId) ? "▲" : "▼"}
+                    </button>
                   </td>
                 </tr>
 
                 {/* Expanded Row  with Table*/}
                 {expandedRows.includes(rowId) && (
                   <table
-                    style={{
-                      tableLayout: "fixed",
-                      width: "100%",
-                    }}
+                    className="dropdownTable"
+                    // style={{
+                    //   tableLayout: "fixed",
+                    //   width: "100%",
+                    // }}
                   >
                     <thead>
                       <tr>
-                        <th style={{ width: "60%" }}>Product</th>
+                        <th style={{ width: "60%" }}>Raw Material</th>
                         <th style={{ width: "40%" }}>Quantity</th>
                       </tr>
                     </thead>
@@ -136,24 +138,8 @@ const ManufacturedProductTable = () => {
                             if (Array.isArray(parsed)) {
                               return parsed.map((item: any, index: number) => (
                                 <tr key={index}>
-                                  <td
-                                    style={{
-                                      backgroundColor: "lightgreen",
-                                      maxWidth: "50%",
-                                      wordBreak: "break-word", // Ensure content stays within bounds
-                                    }}
-                                  >
-                                    {item.productName}
-                                  </td>
-                                  <td
-                                    style={{
-                                      backgroundColor: "lightyellow",
-                                      maxWidth: "50%",
-                                      wordBreak: "break-word", // Ensure content stays within bounds
-                                    }}
-                                  >
-                                    {item.quantity}
-                                  </td>
+                                  <td>{item.productName}</td>
+                                  <td>{item.quantity}</td>
                                 </tr>
                               ));
                             } else if (parsed && typeof parsed === "object") {
@@ -182,45 +168,46 @@ const ManufacturedProductTable = () => {
         </tbody>
       </table>
       <div className="h-2" />
-      <div className="flex items-center gap-2">
+      <div className="pagContainer">
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
           {"<<"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
           {">"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
           {">>"}
         </button>
-        <span className="flex items-center gap-1">
+        <span className="pagText">
           <div>Page</div>
           <strong>
             {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </strong>
         </span>
-        <span className="flex items-center gap-1">
+        <span className="pagText">
           | Go to page:
           <input
+            className="pagInput"
             type="number"
             min="1"
             max={table.getPageCount()}
@@ -229,10 +216,10 @@ const ManufacturedProductTable = () => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="border p-1 rounded w-16"
           />
         </span>
         <select
+          className="pagSelect"
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));

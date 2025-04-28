@@ -7,7 +7,9 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div style={{ padding: 20 }}>
+      <div
+        style={{ padding: 20, backgroundColor: "black", minHeight: "100vh" }}
+      >
         <BrowserRouter>
           <InvNavbar />
           <InvRoutes />

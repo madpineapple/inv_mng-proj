@@ -14,13 +14,13 @@ const CustomerDetails: React.FC = () => {
     error,
   } = useManufacturedProductbyCustomerID(customerID || 0);
 
-  console.log(customerID);
   const navigate = useNavigate();
 
   return (
     <div>
       <h1>Details for Customer : {state?.customer?.p_CustomerName}</h1>
       <button
+        className="addButton"
         onClick={() =>
           navigate(`/recipe/${state?.customer?.p_CustomerId}`, {
             state: { customer: state?.customer },

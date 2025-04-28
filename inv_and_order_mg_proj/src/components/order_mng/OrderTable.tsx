@@ -46,7 +46,7 @@ const OrderTable = () => {
 
   return (
     <div>
-      <table className="table">
+      <table className="custom-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -79,45 +79,46 @@ const OrderTable = () => {
         </tbody>
       </table>
       <div className="h-2" />
-      <div className="flex items-center gap-2">
+      <div className="pagContainer">
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
           {"<<"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
           {">"}
         </button>
         <button
-          className="border rounded p-1"
+          className="pagButton"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
           {">>"}
         </button>
-        <span className="flex items-center gap-1">
+        <span className="pagText">
           <div>Page</div>
           <strong>
             {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </strong>
         </span>
-        <span className="flex items-center gap-1">
+        <span className="pagText">
           | Go to page:
           <input
+            className="pagInput"
             type="number"
             min="1"
             max={table.getPageCount()}
@@ -126,10 +127,10 @@ const OrderTable = () => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="border p-1 rounded w-16"
           />
         </span>
         <select
+          className="pagSelect"
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));

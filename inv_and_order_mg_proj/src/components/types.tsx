@@ -31,6 +31,7 @@ export interface ManufacturedProduct {
   customerID: number;
   sku: string;
   created_at: Date;
+  price: number;
 }
 
 export interface Recipe {
@@ -66,4 +67,9 @@ export interface ManufacturedProductDropdownProps {
 }
 export interface IngredientTableProps {
   inventory: IngredientCheck[] | null;
+}
+
+export interface ChatMessage {
+  sender: "user" | "ai"; // Only user and ai can be the sender
+  text: string;
 }

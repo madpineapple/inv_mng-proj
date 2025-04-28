@@ -76,15 +76,19 @@ const EditProduct = () => {
 
   return (
     <div>
-      <h1>Edit Product: {state?.product?.p_m_productName}</h1>
-      <form>
+      <h1 className="customH1">
+        Edit Product: {state?.product?.p_m_productName}
+      </h1>
+      <form className="orderForm">
         <label>Recipe name</label>
         <input
+          className="orderFormInput"
           value={recipeName}
           onChange={(e) => setRecipeName(e.target.value)}
         />
         <label>Minimum order quantity (in units)</label>
         <input
+          className="orderFormInput"
           type="number"
           value={quantity}
           onChange={(e) => setQuantity(Number(e.target.value))}
@@ -96,6 +100,7 @@ const EditProduct = () => {
             style={{ display: "flex", gap: "10px", marginBottom: "10px" }}
           >
             <input
+              className="orderFormInput"
               type="text"
               value={ingredient.productName}
               onChange={(e) =>
@@ -106,6 +111,7 @@ const EditProduct = () => {
 
             <input
               type="number"
+              className="orderFormInput"
               value={ingredient.quantity}
               onChange={(e) =>
                 handleIngredientChange(index, "quantity", e.target.value)
@@ -113,15 +119,19 @@ const EditProduct = () => {
             />
             <label>qty in kilos</label>
 
-            <button type="button" onClick={() => removeIngredient(index)}>
+            <button
+              className="deleteButton"
+              type="button"
+              onClick={() => removeIngredient(index)}
+            >
               Remove
             </button>
           </div>
         ))}
-        <button type="button" onClick={addIngredient}>
+        <button className="addButton" type="button" onClick={addIngredient}>
           Add Ingredient
         </button>
-        <button type="button" onClick={handleSaveClick}>
+        <button className="addButton" type="button" onClick={handleSaveClick}>
           Save changes
         </button>
       </form>

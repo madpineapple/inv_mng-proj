@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import React, { useEffect, useRef, useState } from "react";
 import EditableCell from "./EditableCell";
 import { Product } from "../types";
 import { Row } from "@tanstack/react-table";
@@ -15,6 +14,7 @@ type EditableRowProps = {
 const EditableRow: React.FC<EditableRowProps> = ({ row }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProduct, setEditedProduct] = useState<Product>(row.original);
+  const rowRef = useRef<HTMLTableRowElement | null>(null);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -48,8 +48,32 @@ const EditableRow: React.FC<EditableRowProps> = ({ row }) => {
     }));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (rowRef.current && !rowRef.current.contains(event.target as Node)) {
+        setIsEditing(false); // Cancel editing if click is outside
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsEditing(false); // Cancel editing on Escape key press
+      }
+    };
+
+    // Add the event listeners
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listeners on component unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
-    <tr>
+    <tr ref={rowRef}>
       {row.getVisibleCells().map((cell) => {
         const column = cell.column;
         return (
@@ -70,15 +94,17 @@ const EditableRow: React.FC<EditableRowProps> = ({ row }) => {
       <td>
         {isEditing ? (
           <div>
-            <Button onClick={handleSaveClick} variant="success">
+            <button className="saveButton" onClick={handleSaveClick}>
               Save
-            </Button>
-            <Button onClick={handleDeleteClick} variant="danger">
+            </button>
+            <button className="deleteButton" onClick={handleDeleteClick}>
               Delete
-            </Button>
+            </button>
           </div>
         ) : (
-          <Button onClick={handleEditClick}>Edit</Button>
+          <button className="editButton" onClick={handleEditClick}>
+            Edit
+          </button>
         )}
       </td>
     </tr>

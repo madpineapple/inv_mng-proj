@@ -1,7 +1,7 @@
 // useCheckInventory.ts
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { IngredientCheck, RecipeIngredients } from "../../components/types";
+import { RecipeIngredients } from "../../components/types";
 
 const checkInventory = async (
   ingredients: RecipeIngredients[]

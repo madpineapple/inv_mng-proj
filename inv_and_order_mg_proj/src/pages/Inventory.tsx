@@ -8,9 +8,11 @@ function Inventory() {
 
   return (
     <div>
-      <h1>Inventory</h1>
-      <button onClick={toggle}>Add New</button>
-      <div className="inventory">
+      <h1 className="customH1">Inventory</h1>
+      <button className="addButton" onClick={toggle}>
+        Add New
+      </button>
+      <div>
         <InventoryTable />
       </div>
       <AddNewProductModal isOpen={isOpen} toggle={toggle} />

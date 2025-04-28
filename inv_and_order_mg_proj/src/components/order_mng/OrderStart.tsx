@@ -5,7 +5,7 @@ const OrderStart = () => {
   return (
     <div>
       <Link to="/ordercreate">
-        <button>+ Add new order</button>
+        <button className="addButton">+ Add new order</button>
       </Link>
       <h2>Current orders in progress</h2>
       <OrderTable />

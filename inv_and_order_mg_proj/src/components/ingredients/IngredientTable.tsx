@@ -6,14 +6,9 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  IngredientCheck,
-  IngredientTableProps,
-  RecipeIngredients,
-} from "../types";
+import { IngredientCheck, IngredientTableProps } from "../types";
 import { useEffect, useState } from "react";
 import { columns } from "./Columns";
-import { useGetIngredients } from "../../hooks/ingredientHooks/useGetIngredients";
 
 const IngredientTable: React.FC<IngredientTableProps> = ({
   inventory,
@@ -48,7 +43,6 @@ const IngredientTable: React.FC<IngredientTableProps> = ({
   });
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <p>Error loading inventory!</p>;
-  console.log(ingredientData);
   return (
     <div>
       <table className="table">

@@ -3,8 +3,8 @@ import CustomerTable from "./CustomerTable";
 const Customer = () => {
   return (
     <div>
-      <h1> Customer</h1>
-      <button>+ Add new customer</button>
+      <h1 className="customH1"> Customer</h1>
+      <button className="addButton">+ Add new customer</button>
       <CustomerTable />
     </div>
   );

@@ -4,7 +4,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomerDropdown from "../components/customers/CustomerDropDown";
 import { useManufacturedProductbyCustomerID } from "../hooks/manufacturedProductsHooks/useManufacturedProductsHooks";
-import { Order, RecipeIngredients } from "../components/types";
+import {
+  IngredientCheck,
+  ManufacturedProduct,
+  Order,
+  RecipeIngredients,
+} from "../components/types";
 import useCreateNewOrder from "../hooks/orderHooks/useCreateNewOrder";
 import IngredientTable from "../components/ingredients/IngredientTable";
 import { useGetIngredients } from "../hooks/ingredientHooks/useGetIngredients";
@@ -17,8 +22,11 @@ const OrderCreate = () => {
   const [startOrderDate, setStartOrderDate] = useState<Date | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
-  const [quantity, setQuantity] = useState<number | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
   const [ingredientData, setIngredientData] = useState<RecipeIngredients[]>([]);
+  const [requiredIngredients, setRequiredIngredients] = useState<
+    RecipeIngredients[]
+  >([]); // State for updated ingredient requirements
 
   const {
     data: products,
@@ -41,10 +49,28 @@ const OrderCreate = () => {
   useEffect(() => {
     if (ingredients) {
       setIngredientData(ingredients);
+      setRequiredIngredients(ingredients);
     }
   }, [ingredients]);
 
-  const { data: inventory } = useCheckInventory(ingredientData);
+  const { data: inventory } = useCheckInventory(requiredIngredients);
+
+  const isSubmitDisabled = inventory?.some(
+    (ingredient: IngredientCheck) => !ingredient.isEnough
+  );
+
+  // Update the required ingredients based on quantity
+  const handleQuantityChange = (newQuantity: number) => {
+    setQuantity(newQuantity);
+
+    const updatedIngredients = ingredientData.map((ingredient) => ({
+      ...ingredient,
+      quantity: ingredient.quantity * newQuantity, // Multiply base required amount by the quantity
+    }));
+
+    setRequiredIngredients(updatedIngredients); // Update the required ingredients
+  };
+
   const onSubmit = () => {
     const orderData: Order = {
       p_OrderID: 0,
@@ -69,16 +95,18 @@ const OrderCreate = () => {
 
   return (
     <div>
-      <h1>Create new order</h1>
-      <form className={"order-form"} onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="customH1">Create new order</h1>
+      <form className={"orderForm"} onSubmit={handleSubmit(onSubmit)}>
         <CustomerDropdown onSelect={handleCustomerSelect} />
         <label>Pick new order date</label>
         <DatePicker
+          className="orderFormInput"
           selected={startOrderDate}
           onChange={(date: Date | null) => setStartOrderDate(date)}
         />
         <label>Select Customer Product</label>
         <select
+          className="orderFormSelect"
           value={selectedProduct || ""}
           onChange={(e) => setSelectedProduct(Number(e.target.value))}
         >
@@ -88,8 +116,7 @@ const OrderCreate = () => {
           ) : error ? (
             <option>Error fetching products</option>
           ) : (
-            //probably shouldn't have an any type. Review later
-            products?.map((product: any) => (
+            products?.map((product: ManufacturedProduct) => (
               <option key={product.m_productID} value={product.m_productID}>
                 {product.m_productName}
               </option>
@@ -99,17 +126,24 @@ const OrderCreate = () => {
         {inventory && <IngredientTable inventory={inventory} />}
         <label>Enter number of 1000-unit batches</label>
         <input
+          className="orderFormInput"
           {...register("quantity", { required: "Quantity is required" })}
+          value={quantity}
           type="number"
-          onChange={(e) => setQuantity(Number(e.target.value))}
+          onChange={(e) => handleQuantityChange(Number(e.target.value))}
         />
         <label>Enter price</label>
         <input
+          className="orderFormInput"
           {...register("price", { required: "Price is required" })}
           type="number"
           onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
-        <button type="submit">
+        <button
+          className="addButton"
+          type="submit"
+          disabled={isSubmitDisabled || isPending}
+        >
           {" "}
           {isPending ? "Creating Order..." : "Submit"}
         </button>
