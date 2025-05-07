@@ -60,6 +60,13 @@ function Home() {
     scrollToBottom();
   }, [chat]);
 
+  function isStructuredText(text: string) {
+    return (
+      /^#\s*Item.*$/m.test(text) ||
+      text.includes("Qty") ||
+      text.includes("Location")
+    );
+  }
   return (
     <div>
       <div>
@@ -116,7 +123,12 @@ function Home() {
                     alt={message.sender === "ai" ? "AI" : "User"}
                   />
                 </div>
-                <p>{message.text}</p>
+                {/* Conditionally wrap message text based on its structure */}
+                {isStructuredText(message.text) ? (
+                  <pre>{message.text}</pre> // Table-like text
+                ) : (
+                  <p>{message.text}</p> // Normal text
+                )}
               </div>
             ))}
             <div ref={chatEndRef} />

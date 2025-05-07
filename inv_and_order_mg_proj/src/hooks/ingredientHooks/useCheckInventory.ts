@@ -10,6 +10,8 @@ const checkInventory = async (
     "http://localhost:5230/IngredientCheck",
     ingredients
   );
+  console.log(ingredients);
+
   return response.data;
 };
 
