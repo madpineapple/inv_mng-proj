@@ -13,6 +13,7 @@ function Home() {
 
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [isChatting, setIsChatting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutateAsync, isError } = useLLMHook();
 
   const scrollToBottom = () => {
@@ -33,27 +34,29 @@ function Home() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // prevent newline
-      handleSubmit(e); // call your submit function
+      e.preventDefault();
+      handleSubmit(e);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setIsChatting(true);
+    setInput(" ");
 
     const userMessage: ChatMessage = { sender: "user", text: input };
     setChat((prevChat) => [...prevChat, userMessage]);
     scrollToBottom();
     try {
       const response = await mutateAsync(input);
-      const aiMessage: ChatMessage = { sender: "ai", text: response.response }; // 👈 FIXED
+      const aiMessage: ChatMessage = { sender: "ai", text: response.response };
       setChat((prevChat) => [...prevChat, aiMessage]);
       scrollToBottom();
-      setIsChatting(true);
     } catch (err) {
       console.error("Error fetching response:", err);
     }
-    setInput("");
+    setTimeout(() => setIsSubmitting(false), 1000);
   };
 
   useEffect(() => {
@@ -61,11 +64,10 @@ function Home() {
   }, [chat]);
 
   function isStructuredText(text: string) {
-    return (
-      /^#\s*Item.*$/m.test(text) ||
-      text.includes("Qty") ||
-      text.includes("Location")
-    );
+    // Regex pattern to match: "Item - Quantity units at Location"
+    const inventoryPattern = /\w[\w\s]+-\s*\d+\s*units\s*at\s*\w+[-\w]*/g;
+
+    return inventoryPattern.test(text);
   }
   return (
     <div>
@@ -88,7 +90,10 @@ function Home() {
                     onKeyDown={handleKeyDown}
                     ref={textareaRef}
                   />
-                  <button type="submit" disabled={!input.trim()}>
+                  <button
+                    type="submit"
+                    disabled={!input.trim() || isSubmitting}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -110,28 +115,42 @@ function Home() {
             </div>
           </div>
         ) : (
-          <div className="chat-history">
-            {chat.map((message, index) => (
-              <div
-                key={index}
-                className={`message ${message.sender === "ai" ? "ai" : "user"}`}
-              >
-                <div className="profile-pic-wrapper">
-                  <img
-                    className="profile-pic"
-                    src={message.sender === "ai" ? ai : user}
-                    alt={message.sender === "ai" ? "AI" : "User"}
-                  />
-                </div>
-                {/* Conditionally wrap message text based on its structure */}
-                {isStructuredText(message.text) ? (
-                  <pre>{message.text}</pre> // Table-like text
-                ) : (
-                  <p>{message.text}</p> // Normal text
-                )}
+          <div>
+            <div className="chat-screen">
+              <div className="chat-history">
+                {chat.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`message ${
+                      message.sender === "ai" ? "ai" : "user"
+                    }`}
+                  >
+                    <div className="profile-pic-wrapper">
+                      {message.sender === "ai" &&
+                      index === chat.length - 1 &&
+                      isChatting ? (
+                        <div className="profile-pic-wrapper thinking-glow">
+                          <div className="glow-eye" />
+                        </div>
+                      ) : (
+                        <img
+                          className="profile-pic"
+                          src={message.sender === "ai" ? ai : user}
+                          alt={message.sender === "ai" ? "AI" : "User"}
+                        />
+                      )}
+                    </div>
+                    {/* Conditionally wrap message text based on its structure */}
+                    {isStructuredText(message.text) ? (
+                      <pre>{message.text}</pre> // Table-like text
+                    ) : (
+                      <p>{message.text}</p> // Normal text
+                    )}
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
               </div>
-            ))}
-            <div ref={chatEndRef} />
+            </div>
             <form className="query-form" onSubmit={handleSubmit}>
               <div className="input-wrapper">
                 <textarea

@@ -106,12 +106,13 @@ body {
 }
 
 table {
-  max-width: 90%;
-  min-width: 90%;
+  /* max-width: 90%;
+  min-width: 90%; */
+  width: 100%;
   border-collapse: collapse;
   border: 1px solid #ccc;
   margin: 20px 0;
-  table-layout: fixed;
+  table-layout: auto;
   background-color: #2e2e2e;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
@@ -375,19 +376,19 @@ table {
   filter: drop-shadow(10px 10px 200px #df0707)
     drop-shadow(-10px -10px 50px #df0707);
   z-index: 0;
-  overflow: hidden; /* Add this */
+  overflow: hidden;
   contain: paint;
 }
 .triangle-bg {
   width: calc(70vh - 70px);
   height: calc(70vh - 70px);
-  background-color: hsl(210, 50%, 14%);
+  background-color: black;
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  filter: blur(80px) drop-shadow(-10px -10px 75px #ff1a1a);
+  /* filter: blur(80px) drop-shadow(-10px -10px 75px #ff1a1a); */
   backdrop-filter: blur(10px);
   z-index: 0;
   overflow: hidden; /* Add this */
@@ -396,17 +397,46 @@ table {
 .ai-eye {
   width: 50px;
   height: 50px;
-  border: 4px solid red;
   border-radius: 50%;
-  box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.5);
-  background-color: rgba(240, 6, 6, 0.4);
+  box-shadow: 0 0 50px rgba(255, 0, 0, 0.7), 0 0 40px rgba(255, 0, 0, 0.5);
+  background-color: red;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation: pulse 1.5s infinite ease-in-out;
+
   z-index: 0;
 }
-
+.glow-eye {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 8px red;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+.thinking-glow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px; /* Adjust to match your current avatar size */
+  height: 100px;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 8px red;
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 18px red;
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 8px red;
+    opacity: 0.8;
+  }
+}
 .chat-box {
   width: 100%;
   background-color: white;
@@ -421,7 +451,11 @@ table {
 .initial-form {
   text-align: center;
 }
-
+.chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 75vh;
+}
 .chat-history {
   overflow-y: scroll;
   flex-grow: 1;
